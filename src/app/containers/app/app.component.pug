@@ -10,7 +10,7 @@
       .box
         p
           button.btn((click)="toggleFavoritesOnly()" "[ngClass]"="{ 'btn_pressed': showFavoritesOnly$ | async }") Только избранные
-  .row
+  .row.center-xs
     .col-xs-12
       .box
         p(*ngIf="loading$ | async")
