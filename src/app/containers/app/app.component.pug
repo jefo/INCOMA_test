@@ -13,11 +13,10 @@
   .row.center-xs
     .col-xs-12
       .box
+        span(*ngIf="count === 0 && !(loading$ | async)") Ничего не найдено
         p(*ngIf="loading$ | async")
           img(src="assets/ajax-loader.gif")
   .heroes-list.row
-    .col-xs-12(*ngIf="loadError")
-      .box {{loadError}}
     ng-container(*ngIf="heroes$")
       app-hero.col-xs-12.col-sm-6.col-md-4.col-lg-3(*ngFor="let hero of heroes$ | async" "(favorite)"="toggleFavorite(hero.id)" "[hero]"="hero")
   .row.center-xs(*ngIf="count < totalCount && !showFavoritesOnly$ | async")

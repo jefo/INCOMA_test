@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
         if (showFavorites) {
           heroes = heroes.filter(h => favorites.includes(h.id));
         }
+        this.count = heroes.length;
         return heroes.map((h: Hero) => ({ ...h, isFavorite: favorites.includes(h.id) }));
       }),
     );
