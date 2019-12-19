@@ -17,9 +17,8 @@
         p(*ngIf="loading$ | async")
           img(src="assets/ajax-loader.gif")
   .heroes-list.row
-    ng-container(*ngIf="heroes$")
-      app-hero.col-xs-12.col-sm-6.col-md-4.col-lg-3(*ngFor="let hero of heroes$ | async" "(favorite)"="toggleFavorite(hero.id)" "[hero]"="hero")
-  |  {{count}}<{{totalCount}}
+    ng-container(*ngIf="heroes.length > 0 && !(loading$ | async)")
+      app-hero.col-xs-12.col-sm-6.col-md-4.col-lg-3(*ngFor="let hero of heroes" "(favorite)"="toggleFavorite(hero.id)" "[hero]"="hero")
   .row.center-xs(*ngIf="count < totalCount && !(showFavoritesOnly$ | async)")
     button.btn("(click)"="loadMore()" "[disabled]"="loading$ | async") 
       img(*ngIf="loading$ | async" src="assets/ajax-loader.gif" width="12" height="12")

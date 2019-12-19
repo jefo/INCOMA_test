@@ -1,9 +1,9 @@
 import md5 from 'js-md5';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, concat, observable, merge, combineLatest } from 'rxjs';
 import { Hero } from '../models/hero';
-import { map, tap, catchError, takeLast } from 'rxjs/operators';
+import { map, tap, catchError, takeLast, switchMap, mergeAll, mergeMap, take } from 'rxjs/operators';
 
 const API_KEY = '08a0d00a1c68e8c5029c1c460c062b89';
 const API_KEY_PRIVATE = 'e82311685787316fbe221ee05734ff92cfb9ed32';
@@ -46,6 +46,10 @@ export class HeroService {
 
   constructor(private http: HttpClient) { }
 
+  get heroes() {
+    return this._heroes$.getValue();
+  }
+
   getAll(offset = 0, replace = false) {
     this.count = 0;
     this.total = 0;
@@ -70,13 +74,23 @@ export class HeroService {
     );
   }
 
+  getByIds(ids: number[]) {
+    let observables: Observable<Hero>[] = []
+    ids.forEach(id => {
+      observables.push(this.http.get<any>(apiUrl('characters'), {
+        params: { id: id.toString() },
+      }).pipe(map((resp: any) => resp.data.results[0])));
+    });
+    return combineLatest(...observables);;
+  }
+
   private _handleRequest(request: Observable<Hero[]>, replace: boolean) {
     if (replace) {
       this._heroes$.next([]);
       this.total = 0;
       this.count = 0;
     }
-    request.pipe(takeLast(1)).subscribe(
+    request.pipe(take(1)).subscribe(
       (resp: any) => {
         this.offset = resp.data.offset;
         this.total = resp.data.total;
