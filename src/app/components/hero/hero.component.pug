@@ -1,0 +1,5 @@
+.box.hero
+  .hero__content
+    <svg-icon class="favorite" (click)="toggleFavorite()" [src]="favIcon" [svgStyle]="{ 'width.px':24 }"></svg-icon>
+    div.hero__img(*ngIf="hero.thumbnail" "[ngStyle]"="{'background-image': 'url(' + hero.thumbnail.path + '.' + hero.thumbnail.extension +')'}")
+  p.hero__name {{hero.name}}
